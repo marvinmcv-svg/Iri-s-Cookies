@@ -1,10 +1,12 @@
 import { test, expect } from '@playwright/test'
-import { visit, fillBox, hasMobileBar, overlaps, WA } from './helpers'
+import { visit, showDock, fillBox, hasMobileBar, overlaps, WA } from './helpers'
 
 test.describe('WhatsApp widget', () => {
   test('floating button is visible, on-brand and links to the shop', async ({ page }) => {
     await visit(page)
     const fab = page.locator('.wa-fab')
+    await expect(fab).toBeHidden() // keeps the hero clean
+    await showDock(page)
     await expect(fab).toBeVisible()
     await expect(fab).toHaveAttribute('href', new RegExp('^' + WA.replace(/[.]/g, '\\.') + '\\?text='))
     await expect(fab).toHaveAttribute('target', '_blank')
@@ -29,6 +31,7 @@ test.describe('WhatsApp widget', () => {
   test('does not cover the mobile order bar, and hides during checkout', async ({ page }) => {
     await visit(page)
     await fillBox(page)
+    await showDock(page)
     const fab = page.locator('.wa-fab'), iri = page.locator('.iri-fab')
     if (hasMobileBar(page)) {
       const bar = page.locator('.mbar')

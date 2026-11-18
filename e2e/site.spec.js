@@ -19,7 +19,7 @@ test.describe('Storefront', () => {
 
   test('all main sections render', async ({ page }) => {
     await visit(page)
-    for (const id of ['#top', '#shop', '#como', '#sabores', '#build', '#mas', '#eventos']) {
+    for (const id of ['#top', '#shop', '#como', '#sabores', '#build', '#mas', '#eventos', '#pedir']) {
       await expect(page.locator(id), id).toBeAttached()
     }
     await expect(page.locator('footer.foot')).toBeAttached()

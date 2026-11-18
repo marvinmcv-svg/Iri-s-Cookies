@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { visit, scrollThrough, mockIri, fillBox } from './helpers'
+import { visit, scrollThrough, showDock, mockIri, fillBox } from './helpers'
 
 // Captures review screenshots for every device into screenshots/<project>/.
 test.describe('Screens @visual', () => {
@@ -17,6 +17,13 @@ test.describe('Screens @visual', () => {
     await page.waitForTimeout(700)
     await extras.screenshot({ path: `${dir}/02-extras.png` })
 
+    await page.locator('#pedir').scrollIntoViewIfNeeded()
+    await page.waitForTimeout(800)
+    await page.locator('#pedir').screenshot({ path: `${dir}/05-booking.png` })
+    await page.locator('#eventos').scrollIntoViewIfNeeded()
+    await page.waitForTimeout(800)
+    await page.locator('#eventos').screenshot({ path: `${dir}/06-events.png` })
+    await showDock(page)
     await page.locator('.iri-fab').click()
     await page.locator('#iri-input').fill('¿Qué sabores tienen?')
     await page.locator('#iri-input').press('Enter')

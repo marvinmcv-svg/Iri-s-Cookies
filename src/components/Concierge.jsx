@@ -62,6 +62,12 @@ export default function Concierge() {
   const abortRef = useRef(null)
 
   const lifted = b.count > 0 // mobile order bar is visible
+  const [past, setPast] = useState(false) // dock appears once the hero is scrolled past
+  useEffect(() => {
+    const on = () => setPast(window.scrollY > window.innerHeight * 0.55)
+    on(); window.addEventListener('scroll', on, { passive: true })
+    return () => window.removeEventListener('scroll', on)
+  }, [])
   const hidden = b.checkoutOpen
 
   useEffect(() => { sessionStorage.setItem(STORE_KEY, JSON.stringify(msgs.slice(-30))) }, [msgs])
@@ -69,10 +75,11 @@ export default function Concierge() {
   // Friendly nudge once per session.
   useEffect(() => {
     if (sessionStorage.getItem('iri.hint')) return
-    const t = setTimeout(() => { setHint(true); sessionStorage.setItem('iri.hint', '1') }, 6000)
+    if (!past) return
+    const t = setTimeout(() => { setHint(true); sessionStorage.setItem('iri.hint', '1') }, 4000)
     const t2 = setTimeout(() => setHint(false), 16000)
     return () => { clearTimeout(t); clearTimeout(t2) }
-  }, [])
+  }, [past])
 
   useEffect(() => {
     if (!open) return
@@ -139,7 +146,7 @@ export default function Concierge() {
   const reset = () => { abortRef.current?.abort(); setBusy(false); setMsgs([]) }
 
   return (
-    <div className={'iri' + (lifted ? ' is-lifted' : '') + (hidden ? ' is-hidden' : '') + (open ? ' is-open' : '')}>
+    <div className={'iri' + (lifted ? ' is-lifted' : '') + (hidden ? ' is-hidden' : '') + (open ? ' is-open' : '') + (past || open ? '' : ' is-docked')}>
       <AnimatePresence>
         {open && (
           <motion.section

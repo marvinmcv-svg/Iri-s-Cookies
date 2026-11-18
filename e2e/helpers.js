@@ -19,7 +19,7 @@ export async function visit(page, { hint = false } = {}) {
 /** Page is hydrated; smooth scrolling off so Playwright's auto-scroll is deterministic. */
 export async function ready(page) {
   await expect(page.locator('.hero-title')).toBeVisible()
-  await expect(page.locator('.iri-fab')).toBeVisible()
+  await expect(page.locator('.hero-cookie')).toHaveCount(9)
   await page.addStyleTag({ content: 'html { scroll-behavior: auto !important; }' })
 }
 
@@ -70,4 +70,11 @@ export async function overlaps(a, b) {
   const [ra, rb] = [await a.boundingBox(), await b.boundingBox()]
   if (!ra || !rb) return false
   return !(ra.x + ra.width <= rb.x || rb.x + rb.width <= ra.x || ra.y + ra.height <= rb.y || rb.y + rb.height <= ra.y)
+}
+
+/** The floating WhatsApp/Iri dock appears once the hero is scrolled past. */
+export async function showDock(page) {
+  await page.evaluate(() => window.scrollTo(0, window.innerHeight * 1.2))
+  await expect(page.locator('.iri-fab')).toBeVisible()
+  await page.waitForTimeout(600) // dock fade-in
 }

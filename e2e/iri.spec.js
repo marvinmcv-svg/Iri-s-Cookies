@@ -1,9 +1,10 @@
 import { test, expect } from '@playwright/test'
-import { visit, ready, mockIri, isMobile, WA } from './helpers'
+import { visit, ready, showDock, mockIri, isMobile, WA } from './helpers'
 
 test.describe('Iri, the AI receptionist', () => {
   test('launcher shows the chef logo and opens the chat', async ({ page }) => {
     await visit(page)
+    await showDock(page)
     const fab = page.locator('.iri-fab')
     await expect(fab).toBeVisible()
     await expect(fab).toHaveAccessibleName(/iri/i)
@@ -33,6 +34,7 @@ test.describe('Iri, the AI receptionist', () => {
   test('answers a typed question, renders bold, lists and safe links', async ({ page }) => {
     const calls = await mockIri(page)
     await visit(page)
+    await showDock(page)
     await page.locator('.iri-fab').click()
     const input = page.locator('#iri-input')
     await input.fill('¿Cuánto cuesta la caja de 6?')
@@ -57,6 +59,7 @@ test.describe('Iri, the AI receptionist', () => {
   test('quick replies send, history is kept, internal links navigate', async ({ page }) => {
     const calls = await mockIri(page)
     await visit(page)
+    await showDock(page)
     await page.locator('.iri-fab').click()
     await page.locator('.iri-quick button', { hasText: '¿Qué sabores tienen?' }).click()
     await expect(page.getByTestId('iri-bot-msg')).toHaveCount(1)
@@ -68,6 +71,7 @@ test.describe('Iri, the AI receptionist', () => {
     // conversation survives a reload (sessionStorage)
     await page.reload()
     await ready(page)
+    await showDock(page)
     await page.locator('.iri-fab').click()
     await expect(page.getByRole('dialog', { name: 'Iri' })).toBeVisible()
     await expect(page.getByTestId('iri-user-msg')).toHaveCount(2)
@@ -81,6 +85,7 @@ test.describe('Iri, the AI receptionist', () => {
   test('shows a friendly fallback with WhatsApp when the API fails', async ({ page }) => {
     await mockIri(page, '', 502)
     await visit(page)
+    await showDock(page)
     await page.locator('.iri-fab').click()
     await page.locator('#iri-input').fill('hola')
     await page.locator('#iri-input').press('Enter')
@@ -93,6 +98,7 @@ test.describe('Iri, the AI receptionist', () => {
   test('Escape and the close button close the chat; reset clears it', async ({ page }) => {
     await mockIri(page)
     await visit(page)
+    await showDock(page)
     const fab = page.locator('.iri-fab')
     await fab.click()
     await page.keyboard.press('Escape')
@@ -113,7 +119,9 @@ test.describe('Iri, the AI receptionist', () => {
   test('nudge bubble appears once and opens the chat', async ({ page }) => {
     await page.clock.install()
     await visit(page, { hint: true })
-    await page.clock.fastForward(6500)
+    await expect(page.locator('.iri-hint')).toHaveCount(0) // never over the hero
+    await showDock(page)
+    await page.clock.fastForward(4500)
     const hint = page.locator('.iri-hint')
     await expect(hint).toBeVisible()
     const box = await hint.boundingBox()
@@ -144,6 +152,7 @@ test.describe('Iri live answers @live', () => {
   test('knows prices, flavours, delivery, events and stays on topic', async ({ page }, info) => {
     test.skip(info.project.name !== 'desktop-1440', 'live check runs once')
     await visit(page)
+    await showDock(page)
     await page.locator('.iri-fab').click()
     expect(await ask(page, '¿Cuánto cuesta la caja de 6 y la de 12?')).toMatch(/87[\s\S]*168|168[\s\S]*87/)
     expect(await ask(page, '¿Cuáles sabores son premium y cuánto suman?')).toMatch(/(biscoff[\s\S]*nutella|nutella[\s\S]*biscoff)[\s\S]*5/)

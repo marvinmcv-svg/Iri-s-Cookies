@@ -4,7 +4,7 @@ import { useBag } from '../store'
 import { Wordmark, WaIcon } from './Brand'
 import { WHATSAPP } from '../data'
 
-const LINKS = [['Shop', '#shop'], ['Sabores', '#sabores'], ['Cómo funciona', '#como'], ['Eventos', '#eventos']]
+const LINKS = [['Shop', '#shop'], ['Sabores', '#sabores'], ['Cómo funciona', '#como'], ['Eventos', '#eventos'], ['Pedir', '#pedir']]
 
 export default function Nav() {
   const { count, pulse, canCheckout, setCheckoutOpen } = useBag()

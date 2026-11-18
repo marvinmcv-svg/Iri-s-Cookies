@@ -8,6 +8,7 @@ import Flavours from './components/Flavours'
 import Builder from './components/Builder'
 import Extras from './components/Extras'
 import CartRental from './components/CartRental'
+import WaBooking from './components/WaBooking'
 import Footer from './components/Footer'
 import Checkout from './components/Checkout'
 import MobileBar from './components/MobileBar'
@@ -19,7 +20,7 @@ export default function Home() {
       <Nav />
       <main>
         <Hero />
-        <Ticker />
+        <Ticker variant="pink" />
         <Deal />
         <Boxes />
         <HowItWorks />
@@ -27,6 +28,7 @@ export default function Home() {
         <Builder />
         <Extras />
         <CartRental />
+        <WaBooking />
       </main>
       <Footer />
       <MobileBar />
