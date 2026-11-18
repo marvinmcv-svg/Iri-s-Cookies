@@ -25,8 +25,8 @@ export const FLAVOURS = [
 export const COMING_SOON = { name: 'Cinnabon', desc: 'Nuestro nuevo sabor inspirado en la canela.' }
 
 export const EXTRAS = [
-  { id: 'cookie-pie', name: "Cookie Pie S'mores & Nutella", tag: 'Para compartir', price: 65, art: ['/img/smores.webp', '/img/nutella.webp'], desc: 'Cookie, Nutella y marshmallows tostados. Para compartir o comer a cucharadas.' },
-  { id: 'bake-your-own', name: 'Bake your own', tag: 'Para hornear en casa', price: 95, art: ['/img/chocolate-chip.webp'], desc: 'Nuestra masa de choco-chip lista para tu horno. También es el regalo perfecto.' },
+  { id: 'cookie-pie', name: "Cookie Pie S'mores & Nutella", tag: 'Para compartir', price: 65, img: '/img/pie-lid.webp', desc: 'Cookie, Nutella y marshmallows tostados. Para compartir o comer a cucharadas.' },
+  { id: 'bake-your-own', name: 'Bake your own', tag: 'Para hornear en casa', price: 95, img: '/img/bake-bag.webp', desc: 'Nuestra masa de choco-chip lista para tu horno. También es el regalo perfecto.' },
   { id: 'fit-chip', name: 'Chocolate Chip Fit', tag: 'Fit', price: 20, img: '/img/fit-chip.webp', desc: 'Toda la textura, versión fit. Consulta ingredientes al pedir.' },
   { id: 'fit-double', name: 'Double Chocolate Fit', tag: 'Fit', price: 22, img: '/img/fit-double.webp', desc: 'Doble chocolate, a tu manera.' },
 ]

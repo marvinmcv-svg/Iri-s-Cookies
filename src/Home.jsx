@@ -11,6 +11,7 @@ import CartRental from './components/CartRental'
 import Footer from './components/Footer'
 import Checkout from './components/Checkout'
 import MobileBar from './components/MobileBar'
+import Concierge from './components/Concierge'
 
 export default function Home() {
   return (
@@ -29,6 +30,7 @@ export default function Home() {
       </main>
       <Footer />
       <MobileBar />
+      <Concierge />
       <Checkout />
     </>
   )

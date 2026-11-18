@@ -273,7 +273,7 @@ body::after { /* film grain for a printed, premium feel */
 /* Checkout */
 .co-backdrop { position: fixed; inset: 0; z-index: 80; background: rgba(17,12,14,.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); display: grid; place-items: center; padding: 16px; overflow-y: auto; }
 .co { position: relative; width: 100%; max-width: 480px; background: var(--petal); border-radius: 30px; padding: 30px; outline: none; box-shadow: 0 40px 100px -20px rgba(0,0,0,.5); max-height: calc(100svh - 32px); overflow-y: auto; }
-.co-x { position: absolute; top: 18px; right: 18px; width: 38px; height: 38px; border-radius: 50%; background: #fff; font-size: 22px; line-height: 1; border: 1px solid var(--line); }
+.co-x { position: absolute; z-index: 3; top: 18px; right: 18px; width: 38px; height: 38px; border-radius: 50%; background: #fff; font-size: 22px; line-height: 1; border: 1px solid var(--line); }
 .co-step { font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; opacity: .55; margin: 0 0 8px; }
 .co h2 { margin: 0; font: 800 34px/1 var(--display); letter-spacing: -0.04em; }
 .co-progress { height: 3px; background: var(--line); border-radius: 3px; margin: 18px 0 22px; overflow: hidden; } .co-progress i { display: block; height: 100%; background: var(--ink); }
@@ -401,15 +401,67 @@ body::after { /* film grain for a printed, premium feel */
 .box-tile.six .box-spread img, .box-tile.twelve .box-spread img { width: 100%; rotate: 0deg; }
 .hw-photo-cut { rotate: 0deg; max-width: 100%; }
 .hw-photo-cut.wide { max-width: 100%; }
-.bento-art { position: relative; width: 100%; max-width: 420px; aspect-ratio: 1.3; }
-.bento-art img { position: absolute; max-height: none !important; filter: drop-shadow(0 30px 30px rgba(0,0,0,.35)); transition: transform .6s var(--ease); }
-.bento-art.n2 img:first-child { width: 62%; left: 2%; top: 4%; }
-.bento-art.n2 img:last-child { width: 56%; right: 0; bottom: 0; }
-.bento-art.n1 img { width: 70%; left: 15%; top: 2%; }
-.bento-item:hover .bento-art img:first-child { transform: rotate(-12deg); }
-.bento-item:hover .bento-art img:last-child { transform: rotate(14deg) translateY(-6px); }
-.cart-img img { border-radius: var(--r); box-shadow: 0 40px 80px -30px rgba(17,12,14,.45); filter: none; }
+.bento-item:hover .bento-item:hover .cart-img img { border-radius: var(--r); box-shadow: 0 40px 80px -30px rgba(17,12,14,.45); filter: none; }
 .deal-img { transform: rotate(-8deg); }
 .box-spread { top: 56%; width: 64%; }
 .box-spread.s12 { width: 70%; }
 .c-hot .how-art { overflow: hidden; } .c-hot .hw-photo-cut.wide { width: 100%; height: auto; max-height: 100%; object-fit: contain; }
+
+/* --- Concierge: WhatsApp + Iri, the AI receptionist --- */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.iri { --iri-b: max(20px, env(safe-area-inset-bottom)); --iri-r: max(20px, env(safe-area-inset-right)); position: relative; z-index: 70; }
+.iri.is-hidden { display: none; }
+.iri-dock { position: fixed; z-index: 70; right: var(--iri-r); bottom: var(--iri-b); display: flex; flex-direction: column; align-items: center; gap: 12px; transition: bottom .35s var(--ease); }
+.wa-fab { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: var(--blush); box-shadow: 0 12px 28px -8px rgba(17,12,14,.55); transition: transform .3s var(--ease), background .3s; }
+.wa-fab:hover { transform: translateY(-3px) scale(1.05); background: #000; }
+.iri-fab { position: relative; width: 64px; height: 64px; border-radius: 50%; padding: 0; background: var(--blush); box-shadow: 0 0 0 3px var(--ink), 0 16px 34px -10px rgba(17,12,14,.6); transition: transform .3s var(--ease); }
+.iri-fab:hover { transform: translateY(-3px) scale(1.04); }
+.iri-fab img { width: 100%; height: 100%; border-radius: 50%; }
+.iri-fab::before { content: ''; position: absolute; inset: -3px; border-radius: 50%; border: 2px solid var(--hot); animation: iri-ping 2.6s var(--ease) infinite; pointer-events: none; }
+.iri.is-open .iri-fab::before { display: none; }
+@keyframes iri-ping { 0% { opacity: .9; transform: scale(1); } 70%, 100% { opacity: 0; transform: scale(1.35); } }
+.iri-online { position: absolute; right: 2px; bottom: 2px; width: 14px; height: 14px; border-radius: 50%; background: #2ecc71; border: 2.5px solid var(--ink); }
+.iri-hint { position: absolute; right: calc(100% + 14px); bottom: 10px; width: max-content; max-width: min(250px, calc(100vw - 120px)); text-align: left; background: var(--ink); color: var(--petal); font-size: 14px; font-weight: 500; line-height: 1.35; padding: 12px 16px; border-radius: 18px 18px 4px 18px; box-shadow: 0 14px 30px -10px rgba(17,12,14,.5); }
+
+.iri-panel { position: fixed; z-index: 71; right: var(--iri-r); bottom: calc(var(--iri-b) + 140px); width: min(400px, calc(100vw - 40px)); height: min(620px, calc(100dvh - var(--iri-b) - 170px)); min-height: 380px; display: flex; flex-direction: column; background: var(--petal); border-radius: 26px; overflow: hidden; box-shadow: 0 40px 90px -20px rgba(17,12,14,.55), 0 0 0 1px var(--line); transform-origin: bottom right; }
+.iri-head { display: flex; align-items: center; gap: 12px; padding: 14px 14px 14px 16px; background: var(--ink); color: var(--petal); }
+.iri-ava { position: relative; flex: none; width: 44px; height: 44px; } .iri-ava img { width: 44px; height: 44px; border-radius: 50%; }
+.iri-ava .iri-online { width: 12px; height: 12px; right: -1px; bottom: -1px; border-width: 2px; }
+.iri-who { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.2; }
+.iri-who strong { font: 800 20px var(--display); letter-spacing: -0.03em; } .iri-who small { font-size: 12px; opacity: .7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.iri-ghost { flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; color: var(--blush); background: rgba(247,200,218,.1); transition: background .2s; }
+.iri-ghost:hover { background: rgba(247,200,218,.22); }
+.iri-log { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 18px 14px 10px; display: flex; flex-direction: column; gap: 10px; }
+.iri-msg { max-width: 86%; padding: 11px 14px; border-radius: 18px; font-size: 14.5px; line-height: 1.45; overflow-wrap: anywhere; }
+.iri-msg p { margin: 0; } .iri-msg p + p, .iri-msg p + ul, .iri-msg ul + p { margin-top: 6px; }
+.iri-msg ul { margin: 0; padding-left: 18px; } .iri-msg li + li { margin-top: 2px; }
+.iri-msg a { text-decoration: underline; text-underline-offset: 2px; font-weight: 600; }
+.iri-msg.bot { align-self: flex-start; background: #fff; border: 1px solid var(--line); border-bottom-left-radius: 6px; }
+.iri-msg.bot a { color: var(--rose); }
+.iri-msg.me { align-self: flex-end; background: var(--ink); color: var(--petal); border-bottom-right-radius: 6px; white-space: pre-wrap; }
+.iri-msg.err { background: var(--blush-2); }
+.iri-typing { display: inline-flex; gap: 4px; padding: 4px 0; } .iri-typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--rose); animation: iri-dot 1s infinite ease-in-out; } .iri-typing i:nth-child(2) { animation-delay: .15s; } .iri-typing i:nth-child(3) { animation-delay: .3s; }
+@keyframes iri-dot { 0%, 80%, 100% { transform: translateY(0); opacity: .4; } 40% { transform: translateY(-4px); opacity: 1; } }
+.iri-quick { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.iri-quick button { font-size: 13px; font-weight: 600; padding: 9px 13px; border-radius: 99px; background: var(--blush-2); border: 1px solid rgba(194,24,91,.18); color: var(--ink); transition: background .2s, transform .2s; text-align: left; }
+.iri-quick button:hover { background: var(--blush); transform: translateY(-1px); }
+.iri-form { display: flex; align-items: flex-end; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--line); background: #fff; }
+.iri-form textarea { flex: 1; resize: none; border: 0; outline: none; background: var(--petal); border-radius: 18px; padding: 12px 14px; font: 16px/1.35 var(--sans); color: var(--ink); max-height: 120px; field-sizing: content; }
+.iri-form textarea:focus-visible { box-shadow: 0 0 0 2px var(--hot); }
+.iri-send { flex: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: var(--blush); transition: transform .2s; }
+.iri-send:not(:disabled):hover { transform: scale(1.06); }
+.iri-foot { margin: 0; padding: 0 14px 10px; background: #fff; font-size: 11px; opacity: .6; text-align: center; } .iri-foot a { text-decoration: underline; }
+
+@media (max-width: 900px) {
+  .iri.is-lifted .iri-dock { bottom: calc(var(--iri-b) + 74px); }
+  .iri.is-lifted .iri-panel { bottom: calc(var(--iri-b) + 214px); height: min(620px, calc(100dvh - var(--iri-b) - 244px)); }
+}
+@media (max-width: 640px) {
+  .iri { --iri-b: max(14px, env(safe-area-inset-bottom)); --iri-r: 14px; }
+  .wa-fab { width: 48px; height: 48px; } .iri-fab { width: 56px; height: 56px; }
+  .iri-panel, .iri.is-lifted .iri-panel { inset: 0; width: 100%; height: 100dvh; min-height: 0; border-radius: 0; transform-origin: bottom center; }
+  .iri-head { padding-top: max(14px, env(safe-area-inset-top)); }
+  .iri-form { padding-bottom: max(10px, env(safe-area-inset-bottom)); }
+  .iri.is-open .iri-dock { display: none; }
+  .iri-msg { max-width: 90%; }
+}
