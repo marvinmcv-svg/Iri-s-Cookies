@@ -8,7 +8,7 @@ test.describe('Iri, the AI receptionist', () => {
     const fab = page.locator('.iri-fab')
     await expect(fab).toBeVisible()
     await expect(fab).toHaveAccessibleName(/iri/i)
-    await expect(fab.locator('img')).toHaveAttribute('src', '/img/iri-chef.svg')
+    await expect(fab.locator('img')).toHaveAttribute('src', '/img/iri-logo.webp')
     await expect.poll(() => fab.locator('img').evaluate((i) => i.naturalWidth > 0)).toBe(true)
     expect((await fab.boundingBox()).width).toBeGreaterThanOrEqual(44)
 
@@ -68,6 +68,8 @@ test.describe('Iri, the AI receptionist', () => {
     await expect(page.getByTestId('iri-bot-msg')).toHaveCount(2)
     expect(calls[1].messages.map((m) => m.role)).toEqual(['user', 'assistant', 'user'])
 
+    // a reply interrupted by a reload must not come back as a stuck "typing" bubble
+    await expect(page.locator('.iri-typing')).toHaveCount(0)
     // conversation survives a reload (sessionStorage)
     await page.reload()
     await ready(page)
@@ -75,6 +77,7 @@ test.describe('Iri, the AI receptionist', () => {
     await page.locator('.iri-fab').click()
     await expect(page.getByRole('dialog', { name: 'Iri' })).toBeVisible()
     await expect(page.getByTestId('iri-user-msg')).toHaveCount(2)
+    await expect(page.locator('.iri-typing')).toHaveCount(0)
 
     // in-page link closes Iri and scrolls to the builder
     await page.getByTestId('iri-bot-msg').last().locator('a[href="#build"]').click()
@@ -161,4 +164,21 @@ test.describe('Iri live answers @live', () => {
     expect(await ask(page, 'How much is a single cookie?')).toMatch(/15/)
     expect(await ask(page, 'Do the cookies contain nuts? My son is allergic.')).toMatch(/whatsapp/)
   })
+})
+
+test('a reply cut off by a reload does not leave a stuck typing bubble', async ({ page }) => {
+  await page.route('**/api/chat', () => {}) // never answers
+  await visit(page)
+  await showDock(page)
+  await page.locator('.iri-fab').click()
+  await page.locator('#iri-input').fill('hola')
+  await page.locator('#iri-input').press('Enter')
+  await expect(page.locator('.iri-typing')).toBeVisible()
+  await page.unrouteAll({ behavior: 'ignoreErrors' })
+  await page.reload()
+  await ready(page)
+  await showDock(page)
+  await page.locator('.iri-fab').click()
+  await expect(page.getByTestId('iri-user-msg')).toHaveText('hola')
+  await expect(page.locator('.iri-typing')).toHaveCount(0)
 })

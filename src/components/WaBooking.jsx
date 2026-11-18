@@ -263,7 +263,7 @@ export default function WaBooking() {
               <div className="wb-island" />
               <header className="wb-top">
                 <span className="wb-back" aria-hidden="true">‹</span>
-                <img src="/img/iri-chef.svg" alt="" />
+                <img src="/img/iri-avatar.webp" alt="" />
                 <div><strong>IriCookies</strong><small>{typing ? 'escribiendo…' : 'en línea'}</small></div>
                 <span className="wb-dots" aria-hidden="true">⋮</span>
               </header>

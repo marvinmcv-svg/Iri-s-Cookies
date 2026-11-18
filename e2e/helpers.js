@@ -18,6 +18,7 @@ export async function visit(page, { hint = false } = {}) {
 
 /** Page is hydrated; smooth scrolling off so Playwright's auto-scroll is deterministic. */
 export async function ready(page) {
+  await expect(page.locator('#splash')).toHaveCount(0, { timeout: 8000 }) // loading screen finished
   await expect(page.locator('.hero-title')).toBeVisible()
   await expect(page.locator('.hero-cookie')).toHaveCount(9)
   await page.addStyleTag({ content: 'html { scroll-behavior: auto !important; }' })

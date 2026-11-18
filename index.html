@@ -17,8 +17,51 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="preload" as="image" href="/img/cookies-cream.webp" />
+    <link rel="preload" as="image" href="/img/iri-logo.webp" />
+    <style>
+      #splash { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; align-content: center; gap: 26px; background: radial-gradient(50% 45% at 50% 45%, #3a1626 0%, #110c0e 70%); color: #f7c8da; font: 600 15px/1.2 Inter, system-ui, sans-serif; letter-spacing: .02em; transition: opacity .55s ease, visibility 0s .55s; }
+      #splash.out { opacity: 0; visibility: hidden; pointer-events: none; }
+      #splash .sp-stage { position: relative; width: min(56vw, 240px); aspect-ratio: 1; display: grid; place-items: center; }
+      #splash .sp-ring { position: absolute; inset: -9%; border-radius: 50%; border: 2px dashed rgba(247,200,218,.35); animation: sp-spin 9s linear infinite; }
+      #splash .sp-ring::after { content: ''; position: absolute; top: -6px; left: 50%; width: 12px; height: 12px; margin-left: -6px; border-radius: 50%; background: #ff5c9d; box-shadow: 0 0 18px #ff5c9d; }
+      #splash .sp-logo { width: 100%; animation: sp-bob 2.4s ease-in-out infinite; filter: drop-shadow(0 30px 40px rgba(0,0,0,.6)); transform-origin: 50% 90%; }
+      #splash .sp-logo img { width: 100%; height: auto; display: block; animation: sp-in .9s cubic-bezier(.2,.8,.2,1.2) both; }
+      #splash .sp-chip { position: absolute; width: 9%; aspect-ratio: 1; border-radius: 45% 55% 50% 50%; background: #5a3020; animation: sp-fall 2.2s ease-in infinite; opacity: 0; }
+      #splash .sp-chip:nth-child(3) { left: 8%; animation-delay: .2s; } #splash .sp-chip:nth-child(4) { right: 4%; width: 7%; animation-delay: .9s; } #splash .sp-chip:nth-child(5) { left: 30%; width: 6%; animation-delay: 1.5s; } #splash .sp-chip:nth-child(6) { right: 26%; width: 8%; animation-delay: .5s; }
+      #splash p { margin: 0; } #splash p i { font-style: normal; animation: sp-dot 1.2s infinite; } #splash p i:nth-child(2) { animation-delay: .2s; } #splash p i:nth-child(3) { animation-delay: .4s; }
+      #splash .sp-bar { width: 160px; height: 4px; border-radius: 4px; background: rgba(247,200,218,.15); overflow: hidden; }
+      #splash .sp-bar b { display: block; height: 100%; width: 100%; border-radius: 4px; background: linear-gradient(90deg, #f7c8da, #ff5c9d); transform-origin: left; animation: sp-load 1.3s cubic-bezier(.4,0,.2,1) both; }
+      @keyframes sp-spin { to { transform: rotate(360deg); } }
+      @keyframes sp-bob { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-12px) rotate(3deg); } }
+      @keyframes sp-in { from { transform: scale(.4) rotate(-25deg); opacity: 0; } }
+      @keyframes sp-fall { 0% { top: -6%; opacity: 0; transform: rotate(0); } 15% { opacity: 1; } 100% { top: 105%; opacity: 0; transform: rotate(220deg); } }
+      @keyframes sp-dot { 0%, 100% { opacity: .2; } 50% { opacity: 1; } }
+      @keyframes sp-load { from { transform: scaleX(0); } }
+      @media (prefers-reduced-motion: reduce) { #splash *, #splash *::after { animation-duration: .001s !important; animation-iteration-count: 1 !important; } }
+    </style>
   </head>
   <body>
+    <div id="splash" role="status" aria-label="Cargando IriCookies">
+      <div class="sp-stage">
+        <span class="sp-ring"></span>
+        <div class="sp-logo"><img src="/img/iri-logo.webp" alt="" width="392" height="390" /></div>
+        <span class="sp-chip"></span><span class="sp-chip"></span><span class="sp-chip"></span><span class="sp-chip"></span>
+      </div>
+      <p>Horneando tus cookies<i>.</i><i>.</i><i>.</i></p>
+      <div class="sp-bar"><b></b></div>
+    </div>
+    <script>
+      (function () {
+        var t0 = Date.now(), done = false
+        function hide() {
+          if (done) return; done = true
+          var el = document.getElementById('splash'); if (!el) return
+          setTimeout(function () { el.classList.add('out'); setTimeout(function () { el.remove() }, 600) }, Math.max(0, 1300 - (Date.now() - t0)))
+        }
+        if (document.readyState === 'complete') hide(); else window.addEventListener('load', hide)
+        setTimeout(hide, 4500) // never block the shop for long
+      })()
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

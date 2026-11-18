@@ -6,7 +6,8 @@ import { WHATSAPP } from '../data'
 import { GREETING, QUICK_REPLIES, FALLBACK } from '../iri/knowledge'
 
 const STORE_KEY = 'iri.chat.v1'
-const AVATAR = '/img/iri-chef.svg'
+const AVATAR = '/img/iri-avatar.webp'
+const LOGO = '/img/iri-logo.webp'
 const WA_TEXT = encodeURIComponent('¡Hola IriCookies! 🍪 Tengo una consulta.')
 
 /* ---------- tiny, safe markdown: **bold**, [link](url), "- " lists ---------- */
@@ -45,7 +46,7 @@ function Rich({ text, onLink }) {
 }
 
 const loadChat = () => {
-  try { const v = JSON.parse(sessionStorage.getItem(STORE_KEY)); if (Array.isArray(v)) return v } catch { /* empty */ }
+  try { const v = JSON.parse(sessionStorage.getItem(STORE_KEY)); if (Array.isArray(v)) return v.filter((m) => !m.pending && m.content) } catch { /* empty */ } // drop replies cut off by a reload
   return []
 }
 
@@ -211,7 +212,7 @@ export default function Concierge() {
           <WaIcon size={24} />
         </a>
         <button ref={launcherRef} className="iri-fab" onClick={() => (open ? close() : setOpen(true))} aria-label={open ? 'Cerrar chat con Iri' : 'Chatea con Iri, nuestra recepcionista'} aria-expanded={open}>
-          <img src={AVATAR} alt="" width="60" height="60" />
+          <img src={LOGO} alt="" width="60" height="60" />
           <i className="iri-online" />
         </button>
       </div>
