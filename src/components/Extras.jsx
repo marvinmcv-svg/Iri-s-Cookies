@@ -13,7 +13,11 @@ export default function Extras() {
           const q = bag.extras[e.id] || 0
           return (
             <Reveal key={e.id} delay={i * 0.08} className={'bento-item b-' + e.id}>
-              <div className="bento-img"><img src={e.img} alt={e.name} loading="lazy" /></div>
+              <div className="bento-img">
+                {e.img ? <img src={e.img} alt={e.name} loading="lazy" /> : (
+                  <div className={'bento-art n' + e.art.length}>{e.art.map((src, k) => <img key={k} src={src} alt="" loading="lazy" />)}</div>
+                )}
+              </div>
               <div className="bento-body">
                 <span className="chip">{e.tag}</span>
                 <h3>{e.name}</h3>

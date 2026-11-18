@@ -5,7 +5,7 @@ export default function Deal() {
   return (
     <section className="deal wrap">
       <Reveal className="deal-card">
-        <img src="/img/box-6.webp" alt="Caja de 6 IriCookies" className="deal-img" loading="lazy" />
+        <img src="/img/smores.webp" alt="Cookie S'mores de IriCookies" className="deal-img" loading="lazy" />
         <div className="deal-left">
           <p className="kicker">El deal de siempre</p>
           <h2 className="display">6 por 87 Bs,<br /><span className="serif accent-soft">todos los días.</span></h2>

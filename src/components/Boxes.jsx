@@ -1,12 +1,12 @@
 import { motion } from 'motion/react'
 import Reveal from './Reveal'
 import { useBag } from '../store'
-import { WHATSAPP } from '../data'
+import { WHATSAPP, FLAVOURS } from '../data'
 
 const ITEMS = [
   { n: 1, title: 'La suelta', price: '15 Bs', sub: 'Una cookie, cero excusas.', img: '/img/chocolate-chip.webp', cls: 'single' },
-  { n: 6, title: 'Caja de 6', price: '87 Bs', sub: 'El favorito. Para ti o para regalar.', img: '/img/box-6.webp', cls: 'six' },
-  { n: 12, title: 'Caja de 12', price: '168 Bs', sub: 'Para la oficina, el cumple o tú.', img: '/img/box-12.webp', cls: 'twelve' },
+  { n: 6, title: 'Caja de 6', price: '87 Bs', sub: 'El favorito. Para ti o para regalar.', cls: 'six' },
+  { n: 12, title: 'Caja de 12', price: '168 Bs', sub: 'Para la oficina, el cumple o tú.', cls: 'twelve' },
 ]
 
 export default function Boxes() {
@@ -27,7 +27,16 @@ export default function Boxes() {
               target={it.n === 1 ? '_blank' : undefined} rel="noreferrer"
               onClick={go(it.n)} className={'box-tile ' + it.cls} whileHover="hover">
               <span className="box-num">{it.n}</span>
-              <motion.img src={it.img} alt={it.title} loading="lazy" variants={{ hover: { y: -14, rotate: it.n === 1 ? 25 : -3, scale: 1.04 } }} transition={{ type: 'spring', stiffness: 200, damping: 16 }} />
+              {it.img ? (
+                <motion.img src={it.img} alt={it.title} loading="lazy" variants={{ hover: { y: -14, rotate: 25, scale: 1.04 } }} transition={{ type: 'spring', stiffness: 200, damping: 16 }} />
+              ) : (
+                <motion.div className={'box-spread s' + it.n} variants={{ hover: { y: -10 } }} transition={{ type: 'spring', stiffness: 200, damping: 16 }} aria-hidden="true">
+                  {Array.from({ length: it.n }).map((_, k) => (
+                    <motion.img key={k} src={FLAVOURS[(k * 5 + it.n) % FLAVOURS.length].img} alt="" loading="lazy"
+                      variants={{ hover: { rotate: k % 2 ? 14 : -14, scale: 1.06 } }} transition={{ type: 'spring', stiffness: 260, damping: 14, delay: k * 0.015 }} />
+                  ))}
+                </motion.div>
+              )}
               <div className="box-meta">
                 <strong>{it.title}</strong>
                 <span>{it.sub}</span>

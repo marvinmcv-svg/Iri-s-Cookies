@@ -13,7 +13,7 @@ export const PREMIUM_UPCHARGE = 5
 export const FLAVOURS = [
   { id: 'chocolate-chip', name: 'Chocolate Chip', short: 'Choco Chip', desc: 'La clásica. Bordes dorados, centro suave y chispas de chocolate que se derriten.', img: '/img/chocolate-chip.webp', bg: '#f7d3df', ink: '#110c0e', dot: '#c9925a' },
   { id: 'cookies-cream', name: 'Cookies & Cream', short: 'C&C', desc: 'Trocitos de galleta de cacao y un corazón de crema.', img: '/img/cookies-cream.webp', bg: '#fbe7ee', ink: '#110c0e', dot: '#2a2224' },
-  { id: 'red-velvet', name: 'Red Velvet', short: 'Red Velvet', desc: 'Masa roja aterciopelada con un centro suave y cremoso.', img: '/img/red-velvet.webp', bg: '#f2b6ca', ink: '#110c0e', dot: '#a3223f', small: true },
+  { id: 'red-velvet', name: 'Red Velvet', short: 'Red Velvet', desc: 'Masa roja aterciopelada con un centro suave y cremoso.', img: '/img/red-velvet.webp', bg: '#f2b6ca', ink: '#110c0e', dot: '#a3223f' },
   { id: 'smores', name: "S'mores", short: "S'mores", desc: 'Chocolate y mini marshmallows tostados. Fogata, pero en cookie.', img: '/img/smores.webp', bg: '#f7d3df', ink: '#110c0e', dot: '#f1e6d6' },
   { id: 'double-chocolate', name: 'Double Chocolate', short: 'Double Choc', desc: 'Para los que nunca tienen suficiente chocolate.', img: '/img/double-chocolate.webp', bg: '#140f11', ink: '#f7c8da', dot: '#4a2a22' },
   { id: 'salted-caramel', name: 'Salted Caramel', short: 'Salted Caramel', desc: 'Caramelo que se escapa por los bordes y un toque de sal.', img: '/img/salted-caramel.webp', bg: '#fbe7ee', ink: '#110c0e', dot: '#d08a3c' },
@@ -25,8 +25,8 @@ export const FLAVOURS = [
 export const COMING_SOON = { name: 'Cinnabon', desc: 'Nuestro nuevo sabor inspirado en la canela.' }
 
 export const EXTRAS = [
-  { id: 'cookie-pie', name: "Cookie Pie S'mores & Nutella", tag: 'Para compartir', price: 65, img: '/img/pie-lid.webp', desc: 'Cookie, Nutella y marshmallows tostados. Para compartir o comer a cucharadas.' },
-  { id: 'bake-your-own', name: 'Bake your own', tag: 'Para hornear en casa', price: 95, img: '/img/bake-bag.webp', desc: 'Nuestra masa de choco-chip lista para tu horno. También es el regalo perfecto.' },
+  { id: 'cookie-pie', name: "Cookie Pie S'mores & Nutella", tag: 'Para compartir', price: 65, art: ['/img/smores.webp', '/img/nutella.webp'], desc: 'Cookie, Nutella y marshmallows tostados. Para compartir o comer a cucharadas.' },
+  { id: 'bake-your-own', name: 'Bake your own', tag: 'Para hornear en casa', price: 95, art: ['/img/chocolate-chip.webp'], desc: 'Nuestra masa de choco-chip lista para tu horno. También es el regalo perfecto.' },
   { id: 'fit-chip', name: 'Chocolate Chip Fit', tag: 'Fit', price: 20, img: '/img/fit-chip.webp', desc: 'Toda la textura, versión fit. Consulta ingredientes al pedir.' },
   { id: 'fit-double', name: 'Double Chocolate Fit', tag: 'Fit', price: 22, img: '/img/fit-double.webp', desc: 'Doble chocolate, a tu manera.' },
 ]

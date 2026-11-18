@@ -5,7 +5,7 @@ import { FLAVOURS } from '../data'
 const days = ['Hoy', 'Mañana', 'Vie', 'Sáb', 'Dom']
 
 const Cards = [
-  { k: '01', t: 'Arma tu caja', d: 'Elige 6 o 12 y llénala con tus sabores. Mezcla todo lo que quieras.', cls: 'c-pink', art: <img src="/img/box-6.webp" alt="" className="hw-photo-cut" loading="lazy" /> },
+  { k: '01', t: 'Arma tu caja', d: 'Elige 6 o 12 y llénala con tus sabores. Mezcla todo lo que quieras.', cls: 'c-pink', art: <img src="/img/scatter.webp" alt="" className="hw-photo-cut" loading="lazy" /> },
   {
     k: '02', t: 'Elige día y hora', d: 'Pickup o delivery, el día y la franja que te queden mejor.', cls: 'c-cream',
     art: (
@@ -27,8 +27,8 @@ const Cards = [
       </div>
     ),
   },
-  { k: '04', t: 'Horneadas ese día', d: 'Nada de stock de ayer: horneamos el día de tu pedido.', cls: 'c-photo', art: <img src="/img/kitchen-oven.webp" alt="Cookies horneándose" className="hw-photo" loading="lazy" /> },
-  { k: '05', t: 'Listas para ti', d: 'Empacadas a mano, para recoger o directo a tu puerta.', cls: 'c-hot', art: <img src="/img/pink-box.webp" alt="Caja rosada de IriCookies" className="hw-photo" loading="lazy" /> },
+  { k: '04', t: 'Horneadas ese día', d: 'Nada de stock de ayer: horneamos el día de tu pedido.', cls: 'c-photo', art: <img src="/img/oven.webp" alt="Cookies horneándose en el horno de IriCookies" className="hw-photo" loading="lazy" /> },
+  { k: '05', t: 'Listas para ti', d: 'Empacadas a mano, para recoger o directo a tu puerta.', cls: 'c-hot', art: <img src="/img/hero-trio.webp" alt="Cookies IriCookies listas" className="hw-photo-cut wide" loading="lazy" /> },
 ]
 
 export default function HowItWorks() {
