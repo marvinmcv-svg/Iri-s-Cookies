@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'motion/react'
 import { FLAVOURS } from '../data'
+import { useMedia } from '../useMedia'
 
 const days = ['Hoy', 'Mañana', 'Vie', 'Sáb', 'Dom']
 
@@ -17,7 +18,7 @@ const Cards = [
     ),
   },
   {
-    k: '03', t: 'Llega a la cocina', d: 'Tu pedido aterriza en nuestro tablero y te confirmamos por WhatsApp.', cls: 'c-white',
+    k: '03', t: 'Lo confirmas por WhatsApp', d: 'Tu pedido llega armado a nuestro WhatsApp. Te confirmamos hora y pago en minutos.', cls: 'c-white',
     art: (
       <div className="mock mock-order">
         <div className="mock-row"><b>IC-2048</b><span className="tag">Nuevo</span></div>
@@ -33,18 +34,19 @@ const Cards = [
 
 export default function HowItWorks() {
   const ref = useRef(null)
+  const swipe = useMedia('(max-width: 900px)') // phones/tablets: a plain swipe row, no scroll-jacking
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
   const x = useTransform(scrollYProgress, [0.05, 0.95], ['0%', '-62%'])
   const bar = useTransform(scrollYProgress, [0.05, 0.95], ['0%', '100%'])
   return (
-    <section className="how" id="como" ref={ref}>
+    <section className={'how' + (swipe ? ' is-swipe' : '')} id="como" ref={ref}>
       <div className="how-sticky">
         <div className="how-head wrap">
           <p className="kicker">Cómo funciona</p>
           <h2 className="display">De un toque<br /><span className="serif accent">a tu puerta.</span></h2>
-          <div className="how-bar"><motion.i style={{ width: bar }} /></div>
+          {!swipe && <div className="how-bar"><motion.i style={{ width: bar }} /></div>}
         </div>
-        <motion.div className="how-track" style={{ x }}>
+        <motion.div className="how-track" style={swipe ? undefined : { x }}>
           {Cards.map((c) => (
             <article key={c.k} className={'how-card ' + c.cls}>
               <span className="how-k">{c.k}</span>

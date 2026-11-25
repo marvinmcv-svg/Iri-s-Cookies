@@ -21,8 +21,8 @@ export default function Flavours() {
     window.scrollTo({ top, behavior: 'smooth' })
   }
   return (
-    <section className="flav" id="sabores" ref={ref} style={{ height: `${FLAVOURS.length * 85 + 40}vh` }}>
-      <motion.div className="flav-sticky" animate={{ backgroundColor: f.bg, color: f.ink }} transition={{ duration: 0.6 }}>
+    <section className="flav" id="sabores" ref={ref} style={{ height: `${FLAVOURS.length * 50 + 60}vh` }}>
+      <motion.div className={'flav-sticky' + (f.ink !== '#110c0e' ? ' is-dark' : '')} animate={{ backgroundColor: f.bg, color: f.ink }} transition={{ duration: 0.6 }}>
         <div className="flav-top wrap">
           <span className="kicker">Los sabores</span>
           <span className="flav-soon">Muy pronto: <b>{COMING_SOON.name}</b> — {COMING_SOON.desc}</span>
@@ -53,7 +53,7 @@ export default function Flavours() {
             <motion.div key={f.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.35 }}>
               <p>{f.desc}</p>
               <p className="flav-price">{f.premium ? `20 Bs · +${PREMIUM_UPCHARGE} Bs en cajas` : '15 Bs · incluida en cajas'}</p>
-              <button className="pill pill-ink" onClick={() => add(f.id)} disabled={full} style={{ '--ink': f.ink, '--bg': f.bg }}>
+              <button className="pill pill-ink" onClick={() => add(f.id)} disabled={full}>
                 <span>{full ? 'Tu caja está llena' : inBox ? `Agregar otra (${inBox})` : 'Agregar a la caja'}</span><i className="pill-dot">+</i>
               </button>
             </motion.div>
@@ -61,7 +61,7 @@ export default function Flavours() {
         </div>
 
         <div className="flav-count"><b>{String(idx + 1).padStart(2, '0')}</b><span>/ {String(FLAVOURS.length).padStart(2, '0')}</span></div>
-        <div className="flav-rail" role="tablist" aria-label="Sabores">
+        <div className="flav-rail" aria-label="Ir a un sabor">
           {FLAVOURS.map((x, i) => <button key={x.id} aria-label={x.name} className={i === idx ? 'on' : ''} onClick={() => jump(i)} />)}
         </div>
       </motion.div>

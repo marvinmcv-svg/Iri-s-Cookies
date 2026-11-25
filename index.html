@@ -12,6 +12,12 @@
     <meta property="og:description" content="Arma tu caja, elige el día y la hora. Horneadas a mano en Santa Cruz, Bolivia." />
     <meta property="og:image" content="https://iri-cookies.vercel.app/img/og.jpg" />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_BO" />
+    <meta property="og:url" content="https://iri-cookies.vercel.app/" />
+    <link rel="canonical" href="https://iri-cookies.vercel.app/" />
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"Bakery","name":"IriCookies","slogan":"Cookies with good fillings","url":"https://iri-cookies.vercel.app/","image":"https://iri-cookies.vercel.app/img/og.jpg","logo":"https://iri-cookies.vercel.app/img/iri-logo.webp","telephone":"+59169078820","priceRange":"15–168 Bs","currenciesAccepted":"BOB","servesCuisine":"Cookies","address":{"@type":"PostalAddress","addressLocality":"Santa Cruz de la Sierra","addressCountry":"BO"},"areaServed":"Santa Cruz de la Sierra","sameAs":["https://www.instagram.com/iri_cookies/"]}
+    </script>
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -52,14 +58,16 @@
     </div>
     <script>
       (function () {
+        var el = document.getElementById('splash'), seen = false
+        try { seen = sessionStorage.getItem('iri.splash') === '1'; sessionStorage.setItem('iri.splash', '1') } catch (e) {}
+        if (seen) { el.remove(); return } // only on the first page view of a visit
         var t0 = Date.now(), done = false
         function hide() {
           if (done) return; done = true
-          var el = document.getElementById('splash'); if (!el) return
-          setTimeout(function () { el.classList.add('out'); setTimeout(function () { el.remove() }, 600) }, Math.max(0, 1300 - (Date.now() - t0)))
+          setTimeout(function () { el.classList.add('out'); setTimeout(function () { el.remove() }, 600) }, Math.max(0, 700 - (Date.now() - t0)))
         }
         if (document.readyState === 'complete') hide(); else window.addEventListener('load', hide)
-        setTimeout(hide, 4500) // never block the shop for long
+        setTimeout(hide, 3000) // never block the shop for long
       })()
     </script>
     <div id="root"></div>

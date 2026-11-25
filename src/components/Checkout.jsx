@@ -1,9 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { useBag, pushOrder, makeCode } from '../store'
-import { WINDOWS, nextDays, flavourById, extraById, WHATSAPP } from '../data'
+import { windowsFor, nextDays, flavourById, extraById, WHATSAPP } from '../data'
 
 const STEPS = ['¿Cómo lo quieres?', '¿Para quién es?', 'Revisa tu pedido']
+const ME_KEY = 'iri.me.v1'
+const loadMe = () => { try { return JSON.parse(localStorage.getItem(ME_KEY)) || {} } catch { return {} } }
+const saveMe = ({ mode, name, phone, ig, address }) => { try { localStorage.setItem(ME_KEY, JSON.stringify({ mode, name, phone, ig, address })) } catch { /* private mode */ } }
 
 function groupItems(items) {
   const m = {}; items.forEach((id) => (m[id] = (m[id] || 0) + 1)); return Object.entries(m)
@@ -13,12 +16,16 @@ export default function Checkout() {
   const b = useBag()
   const { bag, checkoutOpen: open, setCheckoutOpen } = b
   const days = useMemo(() => nextDays(6), [open])
+  const firstDay = Math.max(0, days.findIndex((d) => d.offset === 1)) // default: tomorrow
   const [step, setStep] = useState(0)
-  const [f, setF] = useState({ mode: 'pickup', day: 1, window: WINDOWS[1], name: '', phone: '', ig: '', address: '', note: '' })
+  // Returning customers: their contact details are remembered on this device.
+  const [f, setF] = useState(() => ({ mode: 'pickup', day: firstDay, window: '', name: '', phone: '', ig: '', address: '', note: '', ...loadMe() }))
   const [done, setDone] = useState(null)
   const [touched, setTouched] = useState(false)
   const dialog = useRef(null)
   const set = (k) => (e) => setF((x) => ({ ...x, [k]: e?.target ? e.target.value : e }))
+  const wins = windowsFor(days[f.day]?.offset ?? 1)
+  const win = wins.includes(f.window) ? f.window : wins[0]
 
   useEffect(() => {
     if (!open) return
@@ -43,7 +50,7 @@ export default function Checkout() {
       groupItems(bag.items).forEach(([id, q]) => lines.push(`• ${q}× ${flavourById[id].name}`))
     }
     if (extras.length) { lines.push('', '*Extras*'); extras.forEach(([id, q]) => lines.push(`• ${q}× ${extraById[id].name}`)) }
-    lines.push('', `*Entrega:* ${f.mode === 'pickup' ? 'Pickup' : 'Delivery'} · ${days[f.day].long} · ${f.window}`)
+    lines.push('', `*Entrega:* ${f.mode === 'pickup' ? 'Pickup' : 'Delivery'} · ${days[f.day].long} · ${win}`)
     if (f.mode === 'delivery') lines.push(`*Dirección:* ${f.address}`)
     lines.push(`*Nombre:* ${f.name}`, `*Contacto:* ${f.phone}${f.ig ? ' · ' + f.ig : ''}`)
     if (f.note) lines.push(`*Nota:* ${f.note}`)
@@ -55,10 +62,11 @@ export default function Checkout() {
     const code = makeCode()
     const order = {
       code, name: f.name.trim(), contact: f.phone + (f.ig ? ' · ' + f.ig : ''), size: hasBox ? bag.size : 0, items: hasBox ? bag.items : [],
-      extras: Object.fromEntries(extras), mode: f.mode, address: f.address, day: days[f.day].dow, window: f.window, note: f.note,
+      extras: Object.fromEntries(extras), mode: f.mode, address: f.address, day: days[f.day].dow, window: win, note: f.note,
       total, status: 'new', createdAt: Date.now(),
     }
     pushOrder(order)
+    saveMe(f)
     const url = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message(code))}`
     window.open(url, '_blank', 'noopener')
     setDone({ code, url, summary: order })
@@ -79,9 +87,9 @@ export default function Checkout() {
                   <span className="mask mark" />
                 </motion.div>
                 <p className="co-step">Pedido {done.code}</p>
-                <h2 id="co-title">Enviado a la cocina.</h2>
-                <p className="co-muted">Abrimos WhatsApp con tu pedido listo para enviar. Envíalo y te confirmamos disponibilidad, hora y pago en minutos.</p>
-                <a className="pill pill-dark block" href={done.url} target="_blank" rel="noreferrer"><span>Abrir WhatsApp</span><i className="pill-dot">→</i></a>
+                <h2 id="co-title">Último paso: envíalo.</h2>
+                <p className="co-muted">Abrimos WhatsApp con tu pedido escrito. <b>Tu pedido cuenta cuando tocas enviar ahí</b>; te confirmamos hora y pago en minutos.</p>
+                <a className="pill pill-dark block" href={done.url} target="_blank" rel="noreferrer"><span>¿No se abrió? Abrir WhatsApp</span><i className="pill-dot">→</i></a>
                 <button className="co-link" onClick={close}>Seguir viendo</button>
               </div>
             ) : (
@@ -102,12 +110,12 @@ export default function Checkout() {
                         <label className="co-label">¿Qué día?</label>
                         <div className="co-days">
                           {days.map((d, i) => (
-                            <button key={d.key} className={f.day === i ? 'on' : ''} onClick={() => set('day')(i)}><b>{d.num}</b><small>{d.dow}</small></button>
+                            <button key={d.key} className={f.day === i ? 'on' : ''} onClick={() => set('day')(i)} aria-pressed={f.day === i} aria-label={d.long}><b>{d.num}</b><small>{d.dow}</small></button>
                           ))}
                         </div>
                         <label className="co-label">{f.mode === 'pickup' ? 'Horario de pickup' : 'Horario de entrega'}</label>
                         <div className="co-wins">
-                          {WINDOWS.map((w) => <button key={w} className={f.window === w ? 'on' : ''} onClick={() => set('window')(w)}>{w}</button>)}
+                          {wins.map((w) => <button key={w} className={win === w ? 'on' : ''} onClick={() => set('window')(w)} aria-pressed={win === w}>{w}</button>)}
                         </div>
                         <button className="co-next" onClick={() => setStep(1)}>Continuar a tus datos</button>
                       </div>
@@ -133,11 +141,11 @@ export default function Checkout() {
                           ))}
                           {extras.map(([id, q]) => <li key={id} className="co-sum-h"><span>{q}× {extraById[id].name}</span><span>{q * extraById[id].price} Bs</span></li>)}
                         </ul>
-                        <p className="co-when">{f.mode === 'pickup' ? 'Pickup' : 'Delivery'} · <b>{days[f.day].long}</b> · {f.window}</p>
+                        <p className="co-when">{f.mode === 'pickup' ? 'Pickup' : 'Delivery'} · <b>{days[f.day].long}</b> · {win}</p>
                         <div className="co-total"><span>Total</span><b>{total} Bs</b></div>
                         {f.mode === 'delivery' && <p className="co-muted small">+ costo de delivery según tu zona.</p>}
-                        <p className="co-info">No cobramos nada aquí. Al enviar, tu pedido llega a nuestra cocina y se abre WhatsApp para confirmar disponibilidad y coordinar el pago.</p>
-                        <button className="co-next pink" onClick={submit}>Enviar a la cocina</button>
+                        <p className="co-info">No cobramos nada aquí. Se abre WhatsApp con tu pedido escrito: lo envías, te confirmamos disponibilidad y coordinamos el pago.</p>
+                        <button className="co-next pink" onClick={submit}>Enviar por WhatsApp</button>
                         <button className="co-link" onClick={() => setStep(1)}>Volver a tus datos</button>
                       </div>
                     )}

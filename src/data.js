@@ -32,6 +32,14 @@ export const EXTRAS = [
 ]
 
 export const WINDOWS = ['10:00 – 12:00', '12:00 – 14:00', '14:00 – 16:00', '16:00 – 18:00']
+export const LEAD_HOURS = 2 // a same-day slot must start at least this many hours from now
+
+/** Time windows still bookable on a given day (0 = today). */
+export function windowsFor(dayOffset, now = new Date()) {
+  if (dayOffset > 0) return WINDOWS
+  const h = now.getHours() + now.getMinutes() / 60
+  return WINDOWS.filter((w) => parseInt(w, 10) >= h + LEAD_HOURS)
+}
 
 export const flavourById = Object.fromEntries(FLAVOURS.map((f) => [f.id, f]))
 export const extraById = Object.fromEntries(EXTRAS.map((e) => [e.id, e]))
@@ -42,13 +50,16 @@ export function boxPrice(size, items) {
   return base + premium * PREMIUM_UPCHARGE
 }
 
+/** The next n bookable days (today is skipped once its last slot has passed). */
 export function nextDays(n = 6) {
   const out = []
   const d = new Date()
-  for (let i = 0; i < n; i++) {
+  const start = windowsFor(0, d).length ? 0 : 1
+  for (let i = start; i < n + start; i++) {
     const x = new Date(d.getFullYear(), d.getMonth(), d.getDate() + i)
     out.push({
-      key: x.toISOString().slice(0, 10),
+      offset: i,
+      key: `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, '0')}-${String(x.getDate()).padStart(2, '0')}`,
       num: String(x.getDate()).padStart(2, '0'),
       dow: i === 0 ? 'Hoy' : i === 1 ? 'Mañana' : x.toLocaleDateString('es-BO', { weekday: 'short' }).replace('.', ''),
       long: x.toLocaleDateString('es-BO', { weekday: 'long', day: 'numeric', month: 'long' }),

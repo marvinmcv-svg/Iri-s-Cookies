@@ -1,7 +1,7 @@
 import { motion } from 'motion/react'
 import Reveal from './Reveal'
 import { useBag } from '../store'
-import { WHATSAPP, FLAVOURS } from '../data'
+import { WHATSAPP, FLAVOURS, PREMIUM_UPCHARGE } from '../data'
 
 const ITEMS = [
   { n: 1, title: 'La suelta', price: '15 Bs', sub: 'Una cookie, cero excusas.', img: '/img/chocolate-chip.webp', cls: 'single' },
@@ -18,7 +18,7 @@ export default function Boxes() {
   }
   return (
     <section className="boxes wrap" id="shop">
-      <Reveal><p className="kicker center">Shop</p></Reveal>
+      <Reveal><p className="kicker center">Las cajas</p></Reveal>
       <Reveal><h2 className="display center">Elige tu tamaño.</h2></Reveal>
       <div className="boxes-grid">
         {ITEMS.map((it, i) => (
@@ -46,6 +46,7 @@ export default function Boxes() {
           </Reveal>
         ))}
       </div>
+      <Reveal><p className="boxes-note">Biscoff y Nutella son premium: +{PREMIUM_UPCHARGE} Bs por cookie en tu caja. Pickup gratis o delivery en Santa Cruz (se cotiza según tu zona).</p></Reveal>
     </section>
   )
 }

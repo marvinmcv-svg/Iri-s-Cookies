@@ -118,7 +118,7 @@ export default function Hero() {
       <div className="hero-grid wrap">
         <div className="hero-copy">
           <motion.p className="eyebrow" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
-            <span className="dot-live" /> Horneadas hoy · Santa Cruz, Bolivia
+            <span className="dot-live" /> Horneadas el día de tu pedido · Santa Cruz
           </motion.p>
           <h1 className="hero-title">
             <span className="line"><motion.span custom={0} variants={line} initial="hidden" animate="show">Cookies with</motion.span></span>

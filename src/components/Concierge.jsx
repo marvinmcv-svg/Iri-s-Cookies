@@ -78,9 +78,17 @@ export default function Concierge() {
     if (sessionStorage.getItem('iri.hint')) return
     if (!past) return
     const t = setTimeout(() => { setHint(true); sessionStorage.setItem('iri.hint', '1') }, 4000)
-    const t2 = setTimeout(() => setHint(false), 16000)
+    const t2 = setTimeout(() => setHint(false), 10000)
     return () => { clearTimeout(t); clearTimeout(t2) }
   }, [past])
+  // The nudge sits over page content on phones: once the visitor keeps scrolling, get out of the way.
+  useEffect(() => {
+    if (!hint) return
+    const y0 = window.scrollY
+    const on = () => { if (Math.abs(window.scrollY - y0) > 300) setHint(false) }
+    window.addEventListener('scroll', on, { passive: true })
+    return () => window.removeEventListener('scroll', on)
+  }, [hint])
 
   useEffect(() => {
     if (!open) return

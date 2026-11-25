@@ -19,10 +19,12 @@ export default function Kitchen() {
 
   useEffect(() => {
     document.title = 'Kitchen · IriCookies'
+    const robots = Object.assign(document.createElement('meta'), { name: 'robots', content: 'noindex, nofollow' })
+    document.head.appendChild(robots)
     const sync = () => setOrders(loadOrders() || [])
     window.addEventListener('storage', sync); window.addEventListener('iri-orders', sync)
     const t = setInterval(() => tick((x) => x + 1), 30000)
-    return () => { window.removeEventListener('storage', sync); window.removeEventListener('iri-orders', sync); clearInterval(t) }
+    return () => { robots.remove(); window.removeEventListener('storage', sync); window.removeEventListener('iri-orders', sync); clearInterval(t) }
   }, [])
 
   const move = (code, status) => {

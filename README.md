@@ -4,7 +4,9 @@ Sitio de pedidos para **IriCookies** (Santa Cruz, Bolivia · [@iri_cookies](http
 
 - **Arma tu caja** (6 u 12) con los sabores del menú, extras (Cookie Pie, Bake your own, Fit).
 - **Checkout en 3 pasos**: pickup/delivery, día y horario, datos → abre WhatsApp con el pedido listo.
-- **Kitchen board** en `/kitchen`: tablero Nuevos → Horneando → Listos, lista de horneado.
+  Solo ofrece franjas que todavía se pueden cumplir (`LEAD_HOURS` en `src/data.js`) y recuerda los datos del cliente en ese dispositivo.
+- **Preguntas frecuentes** (`src/components/Faq.jsx`), con datos estructurados para Google.
+- **Kitchen board** en `/kitchen` (no enlazado desde la tienda, `noindex`): tablero Nuevos → Horneando → Listos, lista de horneado.
   Hoy guarda los pedidos en el navegador (localStorage, sincroniza entre pestañas); para compartirlo
   entre dispositivos hay que conectar una base de datos (ver `src/store.jsx`).
 

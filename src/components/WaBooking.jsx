@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import Reveal from './Reveal'
 import { WaIcon } from './Brand'
-import { FLAVOURS, EXTRAS, BOX_SIZES, PREMIUM_UPCHARGE, WINDOWS, WHATSAPP, nextDays, flavourById, extraById } from '../data'
+import { FLAVOURS, EXTRAS, BOX_SIZES, PREMIUM_UPCHARGE, WHATSAPP, nextDays, windowsFor, flavourById, extraById } from '../data'
 
 const STEPS = ['Qué buscas', 'Detalles', 'Tus datos', 'Enviar']
 const KINDS = [
@@ -16,7 +16,7 @@ const TOPICS = ['Delivery', 'Pagos', 'Ingredientes / alergias', 'Pedido grande',
 const GREETING = '¡Hola! 👋 Soy Iri de IriCookies. Cuéntanos qué se te antoja y te respondemos al toque 🍪'
 
 const hhmm = () => new Date().toLocaleTimeString('es-BO', { hour: '2-digit', minute: '2-digit', hour12: false })
-const todayISO = () => new Date().toISOString().slice(0, 10)
+const todayISO = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}` }
 
 /* WhatsApp *bold* → <b> for the phone preview */
 function WaText({ text }) {
@@ -33,7 +33,9 @@ export default function WaBooking() {
   const [extras, setExtras] = useState({})
   const [ev, setEv] = useState({ type: '', date: '', guests: '', place: '' })
   const [q, setQ] = useState({ topic: '', text: '' })
-  const [me, setMe] = useState({ name: '', mode: 'pickup', zone: '', day: 1, window: WINDOWS[1] })
+  const [me, setMe] = useState(() => ({ name: '', mode: 'pickup', zone: '', day: Math.max(0, days.findIndex((d) => d.offset === 1)), window: '' }))
+  const wins = windowsFor(days[me.day]?.offset ?? 1)
+  const win = wins.includes(me.window) ? me.window : wins[0]
   const [touched, setTouched] = useState(false)
   const [sent, setSent] = useState(false)
   const [typing, setTyping] = useState(false)
@@ -88,13 +90,13 @@ export default function WaBooking() {
     }
     if (step >= 2 || dataOk) {
       if (needsDelivery) {
-        L.push('', `*${me.mode === 'pickup' ? 'Pickup' : 'Delivery'}* · ${days[me.day].long} · ${me.window}`)
+        L.push('', `*${me.mode === 'pickup' ? 'Pickup' : 'Delivery'}* · ${days[me.day].long} · ${win}`)
         if (me.mode === 'delivery' && me.zone.trim()) L.push(`Zona: ${me.zone.trim()}`)
       }
       if (me.name.trim()) L.push('', `Soy ${me.name.trim()} 😊`)
     }
     return L.join('\n')
-  }, [kind, box, extrasList, extrasTotal, ev, q, me, step, dataOk, needsDelivery, days, boxBase, premiumCount])
+  }, [kind, box, extrasList, extrasTotal, ev, q, me, win, step, dataOk, needsDelivery, days, boxBase, premiumCount])
 
   // little "escribiendo…" flash while the message changes
   useEffect(() => {
@@ -226,7 +228,7 @@ export default function WaBooking() {
                           {days.map((d, i) => <button key={d.key} className={me.day === i ? 'on' : ''} onClick={() => setMe((x) => ({ ...x, day: i }))}><b>{d.num}</b><small>{d.dow}</small></button>)}
                         </div>
                         <span className="wb-label">Horario</span>
-                        <div className="wb-chips">{WINDOWS.map((w) => <button key={w} className={'wb-chip' + (me.window === w ? ' on' : '')} onClick={() => setMe((x) => ({ ...x, window: w }))}>{w}</button>)}</div>
+                        <div className="wb-chips">{wins.map((w) => <button key={w} className={'wb-chip' + (win === w ? ' on' : '')} onClick={() => setMe((x) => ({ ...x, window: w }))}>{w}</button>)}</div>
                       </>
                     )}
                   </div>

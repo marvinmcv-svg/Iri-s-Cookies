@@ -14,12 +14,11 @@ export default function Footer() {
         <div><h4>Pedidos</h4><a href={`https://wa.me/${WHATSAPP}`} target="_blank" rel="noreferrer"><WaIcon /> {WHATSAPP_PRETTY}</a></div>
         <div><h4>Instagram</h4><a href={INSTAGRAM} target="_blank" rel="noreferrer"><IgIcon /> @iri_cookies</a></div>
         <div><h4>Dónde</h4><span>Santa Cruz de la Sierra, Bolivia<br />Delivery o pickup</span></div>
-        <div><h4>Menú</h4><a href="#sabores">Sabores</a><a href="#mas">Cookie pie & Bake your own</a><a href="#eventos">Carrito para eventos</a></div>
+        <div><h4>Menú</h4><a href="#sabores">Sabores</a><a href="#mas">Cookie pie & Bake your own</a><a href="#eventos">Carrito para eventos</a><a href="#faq">Preguntas frecuentes</a></div>
       </div>
       <div className="foot-word"><Wordmark /></div>
       <div className="foot-base wrap">
         <span>© {new Date().getFullYear()} IriCookies · Good fillings · Hecho con amor en Santa Cruz</span>
-        <a href="/kitchen">Kitchen</a>
       </div>
     </footer>
   )

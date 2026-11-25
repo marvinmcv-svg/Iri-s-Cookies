@@ -6,8 +6,8 @@ export default function Extras() {
   const { bag, setExtra } = useBag()
   return (
     <section className="extras wrap" id="mas">
-      <Reveal><p className="kicker center">Más de Iri</p></Reveal>
-      <Reveal><h2 className="display center">More to <span className="serif accent">love.</span></h2></Reveal>
+      <Reveal><p className="kicker center">Además</p></Reveal>
+      <Reveal><h2 className="display center">Para compartir <span className="serif accent">(o no).</span></h2></Reveal>
       <div className="bento">
         {EXTRAS.map((e, i) => {
           const q = bag.extras[e.id] || 0

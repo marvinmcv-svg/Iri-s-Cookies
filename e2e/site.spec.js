@@ -19,7 +19,7 @@ test.describe('Storefront', () => {
 
   test('all main sections render', async ({ page }) => {
     await visit(page)
-    for (const id of ['#top', '#shop', '#como', '#sabores', '#build', '#mas', '#eventos', '#pedir']) {
+    for (const id of ['#top', '#shop', '#como', '#sabores', '#build', '#mas', '#eventos', '#faq', '#pedir']) {
       await expect(page.locator(id), id).toBeAttached()
     }
     await expect(page.locator('footer.foot')).toBeAttached()
@@ -59,7 +59,7 @@ test.describe('Extras: original product photos', () => {
 })
 
 test.describe('Ordering flow', () => {
-  test('build a box of 6 and send it to the kitchen via WhatsApp', async ({ page, context }) => {
+  test('build a box of 6 and send it via WhatsApp', async ({ page, context }) => {
     await visit(page)
     await page.locator('#build').scrollIntoViewIfNeeded()
     await page.locator('.build-panel .pill-pink').scrollIntoViewIfNeeded()
@@ -87,7 +87,7 @@ test.describe('Ordering flow', () => {
     await context.route('https://wa.me/**', (r) => r.fulfill({ status: 200, body: 'wa' }))
     await context.route('https://api.whatsapp.com/**', (r) => r.fulfill({ status: 200, body: 'wa' }))
     const popup = context.waitForEvent('page')
-    await dlg.getByRole('button', { name: 'Enviar a la cocina' }).click()
+    await dlg.getByRole('button', { name: 'Enviar por WhatsApp' }).click()
     const wa = await popup
     const url = decodeURIComponent(wa.url())
     expect(url).toContain('wa.me/59169078820')

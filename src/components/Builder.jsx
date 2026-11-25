@@ -14,9 +14,9 @@ export default function Builder() {
   return (
     <section className="build wrap" id="build">
       <div className="build-head">
-        <Reveal><p className="kicker">Build your box</p></Reveal>
+        <Reveal><p className="kicker">A tu gusto</p></Reveal>
         <Reveal><h2 className="display">Arma tu <span className="serif accent">caja.</span></h2></Reveal>
-        <Reveal delay={0.1}><p className="lede">Elige el tamaño, después los sabores. Mezcla, repite o deja que te sorprendamos. Horneamos el día que elijas.</p></Reveal>
+        <Reveal delay={0.1}><p className="lede">Elige el tamaño y toca los sabores para llenarla. Repite tus favoritos o toca «Sorpréndeme». Tocar una cookie de la caja la quita.</p></Reveal>
       </div>
 
       <div className="build-grid">
